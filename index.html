@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Cybersecurity Roadmap Tracker</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Orbitron & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Showdown.js for Markdown to HTML conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+    <style>
+        /* Custom styles */
+        :root {
+            --bg-color: #0a0a1a;
+            --primary-glow: #00f2ff;
+            --secondary-glow: #ff00ff;
+            --card-bg: rgba(10, 20, 40, 0.5);
+            --border-color: rgba(0, 242, 255, 0.2);
+            --text-color: #d0d8e8;
+            --header-font: 'Orbitron', sans-serif;
+            --body-font: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: var(--body-font);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        /* Glassmorphism Effect */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.1);
+        }
+        
+        .week-card:not(.completed) .glass-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+            border-color: rgba(0, 242, 255, 0.4);
+        }
+        
+        /* Completion Fade Effect */
+        .week-card {
+            position: relative;
+        }
+        .week-card-content, .week-card-completion-overlay {
+            transition: opacity 0.5s ease-in-out;
+        }
+        .week-card-completion-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2300f2ff' fill-opacity='0.1'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9H1v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9H1v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9H1v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9H1v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h5V0h1v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v5h4v1h-4v4h-1v-4h-5v4h-1v-4h-5v4h-1v-4h-5v4h-1v-4h-5v4h-1v-4h-5v4h-1v-4h-5v4H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0v-1h5v-5H0V5h6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .week-card.completed .week-card-content {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .week-card.completed .week-card-completion-overlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .completion-icon {
+            font-size: 5rem;
+            color: var(--primary-glow);
+            text-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* Progress Bar with Glow */
+        .progress-bar-container { background-color: rgba(15, 23, 42, 0.5); }
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+            transition: width 0.5s ease-in-out;
+            box-shadow: 0 0 10px var(--primary-glow), 0 0 20px var(--primary-glow);
+        }
+        
+        /* Custom Checkbox */
+        .checkbox-label {
+            position: absolute;
+            top: 1.5rem; /* p-6 */
+            right: 1.5rem; /* p-6 */
+            z-index: 10;
+        }
+        .custom-checkbox {
+            -webkit-appearance: none; appearance: none;
+            background-color: rgba(0, 242, 255, 0.1);
+            width: 1.75rem; height: 1.75rem;
+            border-radius: 0.375rem; cursor: pointer;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+        .custom-checkbox:checked {
+            background-color: var(--primary-glow);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        .custom-checkbox:checked::after {
+            content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            color: #0a0a1a; position: absolute; left: 50%; top: 50%;
+            transform: translate(-50%, -50%) scale(1); font-size: 1rem;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        /* Modal styles */
+        .modal-backdrop { background-color: rgba(13, 17, 23, 0.8); backdrop-filter: blur(5px); }
+        
+        /* Gemini Buttons */
+        .gemini-button {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--primary-glow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            text-shadow: 0 0 5px var(--primary-glow);
+        }
+        .gemini-button:hover {
+            background: var(--primary-glow);
+            color: var(--bg-color);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* Spinner */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--secondary-glow);
+            width: 50px; height: 50px;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* Notes Textarea */
+        .notes-textarea {
+            background-color: rgba(10, 20, 40, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem; padding: 0.75rem;
+            width: 100%; min-height: 80px;
+            color: var(--text-color); transition: border-color 0.2s;
+        }
+        .notes-textarea:focus {
+            outline: none; border-color: var(--primary-glow);
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+        
+        /* Accordion */
+        .accordion-header { cursor: pointer; transition: background-color 0.2s; }
+        .accordion-header:hover { background-color: rgba(0, 242, 255, 0.05); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .accordion-icon { transition: transform 0.3s ease; }
+        .accordion-header.open .accordion-icon { transform: rotate(90deg); }
+
+        /* Resource Tags */
+        .resource-tag {
+            font-size: 0.7rem; font-weight: 600;
+            padding: 2px 6px; border-radius: 4px;
+            margin-left: 8px;
+        }
+        .tag-video { background-color: #ff0055; color: white; }
+        .tag-reading { background-color: #00aaff; color: white; }
+        .tag-lab { background-color: #00ff88; color: #0a0a1a; }
+    </style>
+</head>
+<body class="antialiased">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-5xl relative z-10">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-bold text-white mb-3" style="font-family: var(--header-font);">Cybersecurity Roadmap</h1>
+            <p class="text-lg text-gray-400">Your personal journey from SDE to Security Expert.</p>
+            <div id="auth-status" class="mt-3 text-sm text-slate-500 font-mono">Connecting...</div>
+        </header>
+
+        <!-- AI Mentor Section -->
+        <div id="mentor-section" class="mb-12 glass-card p-6 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold text-white mb-3 flex items-center" style="font-family: var(--header-font);"><i class="fa-solid fa-brain mr-3 text-fuchsia-400"></i>AI Mentor: Weekly Focus</h2>
+            <div id="mentor-focus" class="text-slate-300">
+                <div class="flex items-center gap-4"><div class="spinner h-8 w-8 border-2"></div><span>Generating your focus for the week...</span></div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="mb-12 glass-card p-6 rounded-xl shadow-lg">
+             <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-white">Your Progress</h2>
+                <div id="rank-display" class="text-right"></div>
+            </div>
+            <div class="w-full progress-bar-container rounded-full h-4"><div id="progress-bar-fill" class="h-4 rounded-full progress-bar-fill" style="width: 0%;"></div></div>
+            <p id="progress-text" class="text-center text-sm font-medium text-white mt-2">0/10 Weeks Completed</p>
+        </div>
+
+        <!-- Roadmap Weeks -->
+        <div id="roadmap-container" class="space-y-8"></div>
+        
+         <!-- Footer -->
+        <footer class="text-center mt-16 text-slate-500 text-sm font-mono"><p>Enhanced by Gemini. Happy hacking!</p></footer>
+    </div>
+
+    <!-- Gemini Modal -->
+    <div id="gemini-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden">
+        <div class="glass-card rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-slate-700">
+                <h3 id="gemini-modal-title" class="text-xl font-semibold text-white flex items-center"><i class="fa-solid fa-wand-magic-sparkles mr-3 text-fuchsia-400"></i>Gemini Assistant</h3>
+                <button id="gemini-modal-close" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+            </div>
+            <div id="gemini-modal-content" class="p-6 overflow-y-auto"><div id="gemini-loading" class="flex justify-center items-center h-48"><div class="spinner"></div></div><div id="gemini-response" class="text-gray-300 space-y-4"></div></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // --- Firebase Configuration ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'cybersecurity-roadmap-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "AIza...", authDomain: "...", projectId: "..." };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : undefined;
+
+        // --- Firebase Imports ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- App State ---
+        let db, auth, userId, converter;
+        let progressState = Array(10).fill(false);
+        let notesState = Array(10).fill("");
+        let debounceTimer;
+
+        // --- Roadmap Data (WITH CORRECTED LINKS) ---
+        const roadmapData = [
+            {
+                title: "Cybersecurity Foundations",
+                goals: "Understand CIA triad, threat types, encryption vs hashing, and basic security mindset.",
+                resources: [
+                    { name: "Cisco Introduction to Cybersecurity", url: "https://www.netacad.com/courses/cybersecurity/introduction-cybersecurity", type: "Reading" },
+                    { name: "Google Cybersecurity Cert – Week 1", url: "https://www.coursera.org/professional-certificates/google-cybersecurity", type: "Video" }
+                ],
+                practice: "Set up a Linux VM or WSL and install tools: nmap, curl, wireshark.",
+                task: "Explain the CIA triad in your own words with an example from software development."
+            },
+            {
+                title: "Secure Software Development Basics",
+                goals: "Learn OWASP Top 10 and start secure coding practices.",
+                resources: [
+                    { name: "OWASP Top 10", url: "https://owasp.org/www-project-top-ten/", type: "Reading" },
+                    { name: "Top 10 Secure C++ Coding Practices", url: "https://www.incredibuild.com/blog/top-10-secure-c-coding-practices", type: "Reading" }
+                ],
+                practice: "PortSwigger Web Academy – Start with “XSS”.",
+                task: "Build a basic login system (any stack) and try injecting bad inputs (XSS, SQLi)."
+            },
+            {
+                title: "System & OS Security (Linux-focused)",
+                goals: "Explore user permissions, secure shells, firewalls, rootkits.",
+                resources: [
+                    { name: "OverTheWire: Bandit Levels 0–10", url: "https://overthewire.org/wargames/bandit/", type: "Lab" },
+                    { name: "TryHackMe: Linux Fundamentals", url: "https://tryhackme.com/module/linux-fundamentals", type: "Lab" }
+                ],
+                practice: "Try chmod, iptables, netstat, sudo, and basic shell scripting.",
+                task: "Write a script to check for dangerous file permissions in a folder."
+            },
+            {
+                title: "Network Security Basics",
+                goals: "Understand ports, protocols (TCP, UDP), firewalls, sniffing, scanning.",
+                resources: [
+                    { name: "Tech With Tim: Networking for Dummies", url: "https://www.youtube.com/watch?v=IPvYjXCsTg8", type: "Video" }
+                ],
+                practice: "Use nmap to scan your local network. Use Wireshark to monitor HTTP traffic on your machine.",
+                task: "Scan a machine (your own VM) and explain which services/ports are open and why."
+            },
+            {
+                title: "Cryptography Essentials",
+                goals: "Learn about symmetric/asymmetric encryption, hashing, digital signatures.",
+                resources: [
+                    { name: "Google Cybersecurity Course – Crypto Week", url: "https://www.coursera.org/professional-certificates/google-cybersecurity", type: "Video" },
+                    { name: "Khan Academy Crypto Basics", url: "https://www.khanacademy.org/computing/computer-science/cryptography", type: "Reading" }
+                ],
+                practice: "Try hashing passwords in Python using bcrypt or hashlib.",
+                task: "Implement a small app that hashes passwords securely and verifies them."
+            },
+            {
+                title: "Web Security Deep Dive",
+                goals: "Dive deeper into XSS, CSRF, Clickjacking, Session Hijacking.",
+                resources: [
+                    { name: "PortSwigger Web Security Academy", url: "https://portswigger.net/web-security", type: "Lab" },
+                    { name: "Damn Vulnerable Web App (GitHub)", url: "https://github.com/digininja/DVWA", type: "Lab" }
+                ],
+                practice: "Set up a local vulnerable app using DVWA.",
+                task: "Try at least one real exploit from DVWA and write what you learned."
+            },
+            {
+                title: "Threat Modeling & Security Audits",
+                goals: "Learn how developers anticipate, categorize, and prevent threats.",
+                resources: [
+                    { name: "Microsoft Learn: Threat Modeling", url: "https://learn.microsoft.com/en-us/training/paths/tm-threat-modeling-fundamentals/", type: "Reading" },
+                    { name: "OWASP Threat Modeling Cheat Sheet", url: "https://cheatsheetseries.owasp.org/cheatsheets/Threat_Modeling_Cheat_Sheet.html", type: "Reading" }
+                ],
+                practice: "Pick a mini project (e.g., your login system) and create a threat model diagram.",
+                task: "Draw a simple threat model of a web login page using STRIDE."
+            },
+            {
+                title: "Security Tools for Developers",
+                goals: "Learn about static analysis, linters, and fuzzers.",
+                resources: [
+                    { name: "SonarQube", url: "https://www.sonarqube.org/", type: "Lab" },
+                    { name: "Flawfinder (C/C++)", url: "https://dwheeler.com/flawfinder/", type: "Lab" }
+                ],
+                practice: "Analyze one of your old projects with a security tool and fix 2 vulnerabilities.",
+                task: "Run a scanner on your C++/Python code and document two issues you fixed."
+            },
+            {
+                title: "CTF & Ethical Hacking Intro",
+                goals: "Learn the basics of CTFs, ethical hacking mindset, and solve real problems.",
+                resources: [
+                    { name: "TryHackMe – “Pre-Security” Path", url: "https://tryhackme.com/path/outline/pre-security", type: "Lab" }
+                ],
+                practice: "Create a free account on TryHackMe and solve your first 5 rooms.",
+                task: "Complete 1 beginner TryHackMe path (like “Intro to Cybersecurity”)."
+            },
+            {
+                title: "Capstone + Certification + Review",
+                goals: "Pull everything together into a capstone project and decide on certification.",
+                resources: [
+                    { name: "Google Cybersecurity Certificate", url: "https://www.coursera.org/professional-certificates/google-cybersecurity", type: "Reading" },
+                    { name: "Fortinet Training Institute", url: "https://training.fortinet.com/", type: "Reading" }
+                ],
+                practice: "Build a secure web app or write a Linux security audit script.",
+                task: "Post your capstone code and results on GitHub with a README on what security you implemented and why."
+            }
+        ];
+        
+        // --- Gamification ---
+        const ranks = [
+            { name: 'Novice', icon: 'fa-seedling', threshold: 0, color: 'text-green-400' },
+            { name: 'Apprentice', icon: 'fa-user-graduate', threshold: 2, color: 'text-sky-400' },
+            { name: 'Adept', icon: 'fa-shield-halved', threshold: 5, color: 'text-indigo-400' },
+            { name: 'Expert', icon: 'fa-star', threshold: 8, color: 'text-amber-400' },
+            { name: 'Cyber-Wizard', icon: 'fa-hat-wizard', threshold: 10, color: 'text-fuchsia-400' }
+        ];
+
+        function getRank(completedCount) {
+            return ranks.slice().reverse().find(r => completedCount >= r.threshold);
+        }
+
+        // --- UI Rendering ---
+        function renderRoadmap() {
+            const container = document.getElementById('roadmap-container');
+            container.innerHTML = '';
+            roadmapData.forEach((week, index) => {
+                const isCompleted = progressState[index];
+                const note = notesState[index] || "";
+                const resourcesHTML = week.resources.map(res => {
+                    const tagClass = res.type === 'Video' ? 'tag-video' : res.type === 'Reading' ? 'tag-reading' : 'tag-lab';
+                    return `<li><a href="${res.url}" target="_blank" rel="noopener noreferrer" class="text-sky-400 hover:text-sky-300 hover:underline">${res.name}</a><span class="resource-tag ${tagClass}">${res.type}</span></li>`;
+                }).join('');
+
+                const card = document.createElement('div');
+                card.id = `week-${index}`;
+                card.className = `week-card glass-card rounded-xl shadow-lg relative ${isCompleted ? 'completed' : ''}`;
+                card.innerHTML = `
+                    <label class="checkbox-label"><input type="checkbox" data-index="${index}" class="custom-checkbox" ${isCompleted ? 'checked' : ''}></label>
+                    <div class="week-card-content p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="week-title text-xl sm:text-2xl font-bold text-white pr-12">${week.title}</h3>
+                        </div>
+                        <div class="space-y-2">
+                            ${createAccordionSection('goals', 'Goals', `<p class="pl-6">${week.goals}</p>`, 'fa-bullseye-arrow')}
+                            ${createAccordionSection('learning', 'Core Learning', `<ul class="list-disc list-inside ml-10">${resourcesHTML}</ul>`, 'fa-book-journal-whills')}
+                            ${createAccordionSection('practice', 'Hands-on Practice', `<p class="pl-6">${week.practice}</p>`, 'fa-keyboard')}
+                            ${createAccordionSection('task', 'Checkpoint Task', `<p class="pl-6">${week.task}</p>`, 'fa-clipboard-check')}
+                            ${createAccordionSection('notes', 'My Notes', `<textarea class="notes-textarea" data-index="${index}" placeholder="Jot down your thoughts here...">${note}</textarea>`, 'fa-pencil')}
+                        </div>
+                        <div class="mt-6 pt-4 border-t border-slate-700/50 flex flex-col sm:flex-row gap-3">
+                            <button class="gemini-button explain-button text-sm font-semibold py-2 px-4 rounded-lg flex-1 flex items-center justify-center gap-2" data-index="${index}"><i class="fa-solid fa-lightbulb-on"></i>Explain</button>
+                            <button class="gemini-button practice-button text-sm font-semibold py-2 px-4 rounded-lg flex-1 flex items-center justify-center gap-2" data-index="${index}"><i class="fa-solid fa-laptop-code"></i>Practice</button>
+                            <button class="gemini-button quiz-button text-sm font-semibold py-2 px-4 rounded-lg flex-1 flex items-center justify-center gap-2" data-index="${index}"><i class="fa-solid fa-file-circle-question"></i>Quiz Me</button>
+                        </div>
+                    </div>
+                    <div class="week-card-completion-overlay">
+                        <div class="p-6 text-center">
+                            <i class="completion-icon fa-solid fa-shield-check"></i>
+                            <p class="mt-4 text-2xl font-bold" style="font-family: var(--header-font);">WEEK ${index + 1} COMPLETE</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            addEventListeners();
+            getWeeklyFocus();
+        }
+        
+        function createAccordionSection(id, title, content, icon) {
+            return `
+                <div>
+                    <div id="header-${id}" class="accordion-header flex justify-between items-center p-2 rounded-md">
+                        <h4 class="font-semibold text-white flex items-center"><i class="fa-solid ${icon} mr-3 w-5 text-center text-teal-400"></i>${title}</h4>
+                        <i class="accordion-icon fa-solid fa-chevron-right text-sm text-slate-500"></i>
+                    </div>
+                    <div id="content-${id}" class="accordion-content pl-6 pt-2">
+                        ${content}
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateProgressUI() {
+            const completedCount = progressState.filter(Boolean).length;
+            const percentage = progressState.length > 0 ? (completedCount / progressState.length) * 100 : 0;
+            document.getElementById('progress-bar-fill').style.width = `${percentage}%`;
+            document.getElementById('progress-text').textContent = `${completedCount}/${progressState.length} Weeks Completed`;
+            const currentRank = getRank(completedCount);
+            document.getElementById('rank-display').innerHTML = `<span class="font-semibold text-white">${currentRank.name}</span> <i class="fas ${currentRank.icon} ml-2 ${currentRank.color}"></i>`;
+        }
+
+        // --- Event Handling ---
+        function addEventListeners() {
+            document.querySelectorAll('.custom-checkbox').forEach(el => el.addEventListener('change', handleCheckboxChange));
+            document.querySelectorAll('.notes-textarea').forEach(el => el.addEventListener('input', handleNoteInput));
+            document.querySelectorAll('.gemini-button').forEach(el => el.addEventListener('click', handleGeminiClick));
+            document.querySelectorAll('.accordion-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    header.classList.toggle('open');
+                    if (content.style.maxHeight) {
+                        content.style.maxHeight = null;
+                    } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                    }
+                });
+            });
+        }
+        
+        async function handleCheckboxChange(event) {
+            const index = parseInt(event.target.dataset.index);
+            progressState[index] = event.target.checked;
+            const card = document.getElementById(`week-${index}`);
+            if (event.target.checked) card.classList.add('completed');
+            else card.classList.remove('completed');
+            updateProgressUI();
+            await saveProgress();
+        }
+        
+        function handleNoteInput(event) {
+            const index = parseInt(event.target.dataset.index);
+            notesState[index] = event.target.value;
+            const contentWrapper = event.target.closest('.accordion-content');
+            if (contentWrapper && contentWrapper.style.maxHeight) {
+                contentWrapper.style.maxHeight = contentWrapper.scrollHeight + "px";
+            }
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => saveProgress(), 500);
+        }
+
+        function handleGeminiClick(event) {
+            const button = event.currentTarget;
+            const index = parseInt(button.dataset.index);
+            const week = roadmapData[index];
+            let prompt = '';
+            if (button.classList.contains('explain-button')) {
+                prompt = `I am a software developer learning cybersecurity. For the topic "${week.title}", please explain the core concepts: "${week.goals}". Use simple terms and analogies. Format the response using markdown.`;
+            } else if (button.classList.contains('practice-button')) {
+                prompt = `For the cybersecurity topic "${week.title}", suggest 2-3 more specific, hands-on practice exercises a developer could do. Format the response clearly using markdown, with bolded titles for each idea.`;
+            } else if (button.classList.contains('quiz-button')) {
+                prompt = `Create a short, 3-question multiple-choice quiz about the cybersecurity topic "${week.title}". For each question, provide 4 options (A, B, C, D) and clearly indicate the correct answer at the end of the quiz. Format the response using markdown.`;
+            }
+            showGeminiModal(prompt);
+        }
+        
+        // --- AI Mentor ---
+        async function getWeeklyFocus() {
+            const currentWeekIndex = progressState.findIndex(p => !p);
+            if (currentWeekIndex === -1) {
+                document.getElementById('mentor-focus').innerHTML = `<p>Congratulations, Cyber-Wizard! You've completed the entire roadmap. The next step is yours to forge!</p>`;
+                return;
+            }
+            const currentWeek = roadmapData[currentWeekIndex];
+            const prompt = `I am a developer on week ${currentWeekIndex + 1} of a cybersecurity roadmap. The topic is "${currentWeek.title}". Give me a short, encouraging "weekly focus" tip (2-3 sentences) to keep in mind as I study this topic.`;
+            const focusText = await callGeminiApi(prompt);
+            document.getElementById('mentor-focus').innerHTML = converter.makeHtml(focusText);
+        }
+
+        // --- Gemini API Logic ---
+        async function callGeminiApi(prompt, retries = 3, delay = 1000) {
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+
+            try {
+                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.error("API Error Body:", errorBody);
+                    if (response.status === 429 && retries > 0) {
+                        await new Promise(res => setTimeout(res, delay));
+                        return callGeminiApi(prompt, retries - 1, delay * 2);
+                    } throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                const result = await response.json();
+                if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                    return result.candidates[0].content.parts[0].text;
+                } return "Sorry, I couldn't generate a response.";
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                if (retries > 0) {
+                    await new Promise(res => setTimeout(res, delay));
+                    return callGeminiApi(prompt, retries - 1, delay * 2);
+                } return `An error occurred while contacting the Gemini API: ${error.message}.`;
+            }
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('gemini-modal');
+        const modalCloseBtn = document.getElementById('gemini-modal-close');
+        
+        async function showGeminiModal(prompt) {
+            modal.classList.remove('hidden');
+            document.getElementById('gemini-loading').style.display = 'flex';
+            document.getElementById('gemini-response').innerHTML = '';
+            const responseText = await callGeminiApi(prompt);
+            const htmlContent = converter.makeHtml(responseText);
+            document.getElementById('gemini-loading').style.display = 'none';
+            document.getElementById('gemini-response').innerHTML = htmlContent;
+        }
+
+        modalCloseBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.add('hidden'); });
+
+        // --- Firebase Logic ---
+        async function initialize() {
+            try {
+                converter = new showdown.Converter({ tables: true, strikethrough: true, simpleLineBreaks: true });
+
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    const authStatusEl = document.getElementById('auth-status');
+                    if (user) {
+                        userId = user.uid;
+                        authStatusEl.textContent = `Syncing progress for user: ${userId.substring(0, 8)}...`;
+                        authStatusEl.className = 'mt-3 text-sm text-green-400 font-mono';
+                        await setupProgressListener();
+                    } else {
+                        try {
+                            if (initialAuthToken) await signInWithCustomToken(auth, initialAuthToken);
+                            else await signInAnonymously(auth);
+                        } catch (error) {
+                            console.error("Authentication failed:", error);
+                            authStatusEl.textContent = "Connection failed. Progress not saved.";
+                            authStatusEl.className = 'mt-3 text-sm text-red-400 font-mono';
+                            renderRoadmap();
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                document.getElementById('auth-status').textContent = 'Connection failed. Progress not saved.';
+                renderRoadmap();
+            }
+        }
+
+        async function setupProgressListener() {
+            if (!userId) return;
+            const docRef = doc(db, `artifacts/${appId}/users/${userId}/roadmapData/state`);
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (Array.isArray(data.progress) && data.progress.length === roadmapData.length) progressState = data.progress;
+                    if (Array.isArray(data.notes) && data.notes.length === roadmapData.length) notesState = data.notes;
+                }
+                renderRoadmap();
+            }, (error) => {
+                console.error("Error listening to progress document:", error);
+                renderRoadmap();
+            });
+        }
+
+        async function saveProgress() {
+            if (!userId || !db) return;
+            try {
+                const docRef = doc(db, `artifacts/${appId}/users/${userId}/roadmapData/state`);
+                await setDoc(docRef, { progress: progressState, notes: notesState });
+                console.log("Progress saved successfully.");
+            } catch (error) {
+                console.error("Error saving progress to Firestore:", error);
+            }
+        }
+        
+        // --- Particle Background Effect ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX;
+                this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
+                if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 1.5) + 0.5;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * .4) - .2;
+                let directionY = (Math.random() * .4) - .2;
+                let color = 'rgba(0, 242, 255, 0.5)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            initParticles();
+        });
+
+        // --- Start the App ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initialize();
+            initParticles();
+            animateParticles();
+        });
+
+    </script>
+</body>
+</html>
