@@ -516,7 +516,7 @@
                 if (!response.ok) {
                     const errorBody = await response.text();
                     console.error("API Error Body:", errorBody);
-                    if (response.status === 429 && retries > 0) {
+                    if ((response.status === 429 || response.status === 401 || response.status === 403) && retries > 0) {
                         await new Promise(res => setTimeout(res, delay));
                         return callGeminiApi(prompt, retries - 1, delay * 2);
                     } throw new Error(`API Error: ${response.status} ${response.statusText}`);
@@ -530,7 +530,11 @@
                 if (retries > 0) {
                     await new Promise(res => setTimeout(res, delay));
                     return callGeminiApi(prompt, retries - 1, delay * 2);
-                } return `An error occurred while contacting the Gemini API: ${error.message}.`;
+                } 
+                if (error.message.includes("401") || error.message.includes("403")) {
+                    return "Could not connect to the AI assistant. Please check API key permissions.";
+                }
+                return `An error occurred while contacting the Gemini API: ${error.message}.`;
             }
         }
 
@@ -609,7 +613,7 @@
                 await setDoc(docRef, { progress: progressState, notes: notesState });
                 console.log("Progress saved successfully.");
             } catch (error) {
-                console.error("Error saving progress to Firestore:", error);
+                console.error("Error saving to Firestore:", error);
             }
         }
         
